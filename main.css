@@ -1,0 +1,18 @@
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    margin: 0;
+}
+
+#title {
+    pointer-events: none;
+    user-select: none;
+    font-family: monospace;
+    position: absolute;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+}
