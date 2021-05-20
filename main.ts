@@ -10,6 +10,7 @@ const translate = [0, 0, -6];
 
 function main() {
     const canvas = document.querySelector('canvas')!;
+    const resetBtn = document.querySelector('#reset')! as HTMLDivElement;
     canvas.width = dims.width;
     canvas.height = dims.height;
     const gl = canvas.getContext('webgl');
@@ -31,43 +32,61 @@ function main() {
         },
     };
 
-    renderScene(gl, programInfo, initBuffers(gl));
+    const buffers = initBuffers(gl);
+    renderScene(gl, programInfo, buffers);
     window.addEventListener('resize', (event) => {
         canvas.width = dims.width = document.body.clientWidth;
         canvas.height = dims.height = document.body.clientHeight;
-        renderScene(gl, programInfo, initBuffers(gl));
+        renderScene(gl, programInfo, buffers);
     })
     
-    window.addEventListener('wheel', (e: WheelEvent) => {
-        zoom.value += e.deltaY / 500;
-        if(zoom.value > zoom.max) zoom.value = zoom.max;
-        if(zoom.value < zoom.min) zoom.value = zoom.min;
-        renderScene(gl, programInfo, initBuffers(gl));
-    })
-
-    let mousedown = false;
-    window.addEventListener('mousedown', () => {
-        mousedown = true;
-    })
-
-    window.addEventListener('mouseup', () => {
-        mousedown = false;
-    })
+    // Window Events
+    {
+        window.addEventListener('wheel', (e: WheelEvent) => {
+            zoom.value += e.deltaY / 500;
+            if(zoom.value > zoom.max) zoom.value = zoom.max;
+            if(zoom.value < zoom.min) zoom.value = zoom.min;
+            renderScene(gl, programInfo, buffers);
+        })
     
-    window.addEventListener('mousemove', (e) => {
-        if(mousedown) {
-            translate[0] += e.movementX ;
-            translate[1] += -e.movementY;
-            renderScene(gl, programInfo, initBuffers(gl));
-        }
+        let mousedown = false;
+        window.addEventListener('mousedown', () => {
+            mousedown = true;
+        })
+    
+        window.addEventListener('mouseup', () => {
+            mousedown = false;
+        })
+        
+        window.addEventListener('mousemove', (e) => {
+            if(mousedown) {
+                translate[0] += e.movementX ;
+                translate[1] += -e.movementY;
+                renderScene(gl, programInfo, buffers);
+            }
+        })
+    
+        window.addEventListener('keyup', (e) => {
+            switch(e.key) {
+                case "Esc":
+                case "Escape":
+                    resetSquarePosition()
+                    break;
+            }
+            e.preventDefault();
+        })
+    }
+
+    // Reset Button
+    resetBtn.addEventListener('click', () => {
+        resetSquarePosition()
     })
 
-    window.addEventListener('keyup', (e) => {
-        if(e.key === "Escape") {
-            translate[0] = 0
+    function resetSquarePosition() {
+        translate[0] = 0
             translate[1] = 0
-        }
-    })
+            renderScene(gl!, programInfo, buffers)
+    }
 }
 
 type ProgramInfo = {

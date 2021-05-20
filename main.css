@@ -15,4 +15,21 @@ body {
     color: #fff;
     width: 100%;
     text-align: center;
+    z-index: 2;
+}
+
+.red {
+    color: #e64017;
+}
+
+code {
+    background: #2c2938;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: #fff;
+}
+
+#reset {
+    cursor: pointer;
+    pointer-events: all;
 }
